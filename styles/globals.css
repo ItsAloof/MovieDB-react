@@ -1,5 +1,6 @@
 html,
 body {
+  background-color: rgb(43, 43, 43);
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
@@ -13,4 +14,61 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+.ui.container {
+  width: 20%;
+  text-align: center;
+}
+
+.results {
+  background-color: #181818;
+  margin-top: 2%;
+  margin-bottom: 0;
+  max-width: 100%;
+}
+
+
+.ui.button {
+  position: relative;
+  left: 25%;
+  right: auto;
+
+}
+
+.searchBar {
+  min-width: max-content;
+  display: inline-flex;
+  margin-top: 2%;
+  padding: 2px;
+}
+
+.search {
+  width: 400px;
+}
+
+.aSettings {
+  font-size: 15px;
+}
+
+.result {
+  width: 400px;
+  height: auto;
+  margin: 20px 15px 50px 15px;
+  background-color: lightgray;
+}
+
+.dropDown {
+  transition: transform 2s ease;
+  transform: rotate(0deg);
+}
+
+
+.dropUp {
+  transition: transform 2s ease;
+  transform: rotate(180deg);
+}
+
+.secondaryColor {
+  color: white;
 }

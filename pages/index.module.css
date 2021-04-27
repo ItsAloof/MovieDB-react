@@ -1,0 +1,11 @@
+.srchBar {
+    margin: 0 auto;
+    height: 100vh;
+    align-self: center;
+    border: thin red;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
+
+  .index-wrapper {
+    padding: 15px
+  }

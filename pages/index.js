@@ -1,65 +1,53 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import axios from 'axios'
+import baseUrl from '../utils/baseUrl'
+import MovieList from '../components/MovieList'
+import SearchBar from '../components/SearchBar'
+import { useRouter } from 'next/router'
+import React from 'react'
+import { Container } from 'semantic-ui-react'
+import Settings from '../components/Settings'
+import { Collapse } from '@material-ui/core'
+import clsx from 'clsx'
+
 
 export default function Home() {
+  const router = useRouter();
+  const [movies, setMovies] = React.useState({ });
+  const [loading, setLoading] = React.useState(false);
+
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+    <div id="root">
+      <Container className="searchBar">
+        <SearchBar onSearch={getMovies} loading={loading} isLoading={setLoading}/>
+        {/* <Settings /> */}
+      </Container>
+      <div>
+        <div className={`ui ${clsx({active:loading}, {disabled:!loading})} loader`}></div>
+        <MovieList loading={loading} movies={movies.props} />
+      </div>
     </div>
-  )
+  );
+
+
+  async function getMovies(search)
+  {
+    setLoading(true);
+    const moviesUrl = `${baseUrl}/search/movie`;
+    const payload = { params: { api_key: `${process.env.API_KEY}`, query: search, include_adult: false } };
+    const res = await axios.get(moviesUrl, payload);
+    const data = res.data.results;
+    let arr = [];
+    for(let i in res.data.results)
+    {
+    const movieUrl = `${baseUrl}/movie/${data[i].id}?api_key=${process.env.API_KEY}`
+      const movie = await (await axios.get(movieUrl)).data;
+      arr[i] = movie;
+    }
+    setLoading(false);
+    setMovies({ props: arr });
+    router.push('/');
+  }
 }
+
+
