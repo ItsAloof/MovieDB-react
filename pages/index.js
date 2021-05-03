@@ -20,7 +20,6 @@ export default function Home() {
     <div id="root">
       <Container className="searchBar">
         <SearchBar onSearch={getMovies} loading={loading} isLoading={setLoading}/>
-        {/* <Settings /> */}
       </Container>
       <div>
         <div className={`ui ${clsx({active:loading}, {disabled:!loading})} loader`}></div>

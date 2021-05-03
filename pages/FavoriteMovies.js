@@ -7,7 +7,7 @@ const FavoriteMovies = () => {
     const itemName = process.env.ITEMNAME;
 
     React.useEffect(() => {
-        if(typeof localStorage !== 'undefined')
+        if(typeof localStorage !== undefined)
         {
             let list = localStorage.getItem(itemName);
             if(list !== null)
@@ -31,8 +31,7 @@ const FavoriteMovies = () => {
         }
     }
 
-    console.log(getMovies());
-    if(movies === 'undefined')
+    if(movies === undefined)
     {
         return (
             <Typography variant="h2">
