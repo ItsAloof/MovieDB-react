@@ -5,8 +5,6 @@ import SearchBar from '../components/SearchBar'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { Container } from 'semantic-ui-react'
-import Settings from '../components/Settings'
-import { Collapse } from '@material-ui/core'
 import clsx from 'clsx'
 
 
@@ -14,6 +12,8 @@ export default function Home() {
   const router = useRouter();
   const [movies, setMovies] = React.useState({ });
   const [loading, setLoading] = React.useState(false);
+
+  
 
 
   return (

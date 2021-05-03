@@ -1,5 +1,5 @@
 import React from 'react'
-import Movie2 from './Movie2'
+import Movie from './Movie'
 import { Grid, Typography } from '@material-ui/core'
 
 const FavoriteList = (movies) => {
@@ -7,7 +7,7 @@ const FavoriteList = (movies) => {
     const itemName = process.env.ITEMNAME;
     const movieList = movies.movies;
 
-    if(movies.movies === 'undefined')
+    if(movieList === undefined)
     {
         return (
             <Typography variant="h1" component='p'>No favorite movies added yet</Typography>
@@ -16,7 +16,7 @@ const FavoriteList = (movies) => {
 
     return (
         <Grid className="results" container direction="row" justify="center">
-            {movieList.map((movie) => (<Movie2 key={movie.id} movie={movie} imgUrl={imgUrl + movie.poster_path} />))}
+            {movieList.map((movie) => (<Movie key={movie.id} movie={movie} imgUrl={imgUrl + movie.poster_path} />))}
         </Grid>
     );
 }
