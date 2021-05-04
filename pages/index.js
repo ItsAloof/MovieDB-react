@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { Container } from 'semantic-ui-react'
 import clsx from 'clsx'
+import { ButtonBase } from '@material-ui/core'
 
 
 export default function Home() {
@@ -20,6 +21,9 @@ export default function Home() {
     <div id="root">
       <Container className="searchBar">
         <SearchBar onSearch={getMovies} loading={loading} isLoading={setLoading}/>
+        <ButtonBase value="Clear Movies" onClick={clearMovies} >
+
+        </ButtonBase>
       </Container>
       <div>
         <div className={`ui ${clsx({active:loading}, {disabled:!loading})} loader`}></div>
@@ -32,19 +36,21 @@ export default function Home() {
   async function getMovies(search)
   {
     setLoading(true);
-    const moviesUrl = `${baseUrl}/search/movie`;
+    clearMovies();
+    const moviesUrl = 'http://localhost:3000/api/movies';
     const payload = { params: { api_key: `${process.env.API_KEY}`, query: search, include_adult: false } };
     const res = await axios.get(moviesUrl, payload);
-    const data = res.data.results;
-    let arr = [];
-    for(let i in res.data.results)
-    {
-    const movieUrl = `${baseUrl}/movie/${data[i].id}?api_key=${process.env.API_KEY}`
-      const movie = await (await axios.get(movieUrl)).data;
-      arr[i] = movie;
-    }
+    console.log(res);
+    const data = res.data;
     setLoading(false);
-    setMovies({ props: arr });
+    setMovies({ props: data });
+    router.push('/');
+  }
+
+  function clearMovies()
+  {
+    console.log(movies);
+    setMovies({ props: []})
     router.push('/');
   }
 }
