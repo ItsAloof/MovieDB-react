@@ -33,8 +33,6 @@ styles = createMuiTheme({
 });
   
   render() {
-    console.log('Vercel: ', process.env.VERCEL, '\nVercel Environment: ', process.env.VERCEL_ENV, '\nAPI Key: ', process.env.API_KEY);
-    console.log(process.env.VERCEL)
     const { Component, pageProps } = this.props;
     return (
     <ThemeProvider theme={this.styles} >
