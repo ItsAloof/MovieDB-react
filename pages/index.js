@@ -20,7 +20,7 @@ export default function Home() {
   return (
     <div id="root">
       <Container className="searchBar">
-        <SearchBar onSearch={getMovies} loading={loading} isLoading={setLoading}/>
+        <SearchBar disabled={loading} onSearch={getMovies} loading={loading} isLoading={setLoading}/>
         <ButtonBase value="Clear Movies" onClick={clearMovies} >
 
         </ButtonBase>
@@ -37,29 +37,19 @@ export default function Home() {
   {
     setLoading(true);
     clearMovies();
-    // const moviesUrl = `http://localhost:3000/api/movies`;
-    let moviesUrl;
-    if(process.env.VERCEL === 1)
-    {
-      moviesUrl = `${window.location.href}/api/movies`;
-
-    }else{
-      moviesUrl = 'http://localhost:3000/api/movies';
-    }
+    const moviesUrl = window.location.href.lastIndexOf((window.location.href.length)-1) === '/' ? `${window.location.href}/api/movies` : 'http://localhost:3000/api/movies';
     const payload = { params: { api_key: `${process.env.API_KEY}`, query: search, include_adult: false } };
     const res = await axios.get(moviesUrl, payload);
     console.log(res);
     const data = res.data;
     setLoading(false);
     setMovies({ props: data });
-    router.push('/');
   }
 
   function clearMovies()
   {
     console.log(movies);
     setMovies({ props: []})
-    router.push('/');
   }
 }
 

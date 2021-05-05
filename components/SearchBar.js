@@ -3,15 +3,22 @@ import { Paper, IconButton, InputBase, Divider, Container, Typography } from '@m
 import SearchIcon from '@material-ui/icons/Search'
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown'
 
-const SearchBar = ({ onSearch }) => {
-    const [query, setQuery] = useState("");
-    const [open, setOpen] = useState(false);
+const SearchBar = ({ onSearch, loading }) => {
+    const [query, setQuery] = useState(""); 
+    const [prevQuery, setPreQuery] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if(!query)
         {
             return;
+        }
+        if(query === prevQuery)
+        {
+            return;
+        }else
+        {
+            setPreQuery(query);
         }
         await onSearch(query);
     }
@@ -30,11 +37,11 @@ const SearchBar = ({ onSearch }) => {
                     <ArrowDropDown />
                 </IconButton>
                 <Divider style={{marginLeft: "0px"}} orientation="vertical" variant="middle" flexItem /> */}
-                <InputBase id="search" className="search"
+                <InputBase readOnly={loading} id="search" className="search"
                     placeholder="Search..."
                     onChange={handleChange}
                 />
-                <IconButton type="submit" onClick={handleSubmit}>
+                <IconButton disabled={loading} type="submit" onClick={handleSubmit}>
                     <SearchIcon />
                 </IconButton>
             </Paper>
