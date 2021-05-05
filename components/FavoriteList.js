@@ -7,10 +7,10 @@ const FavoriteList = (movies) => {
     const itemName = process.env.ITEMNAME;
     const movieList = movies.movies;
 
-    if(movieList === undefined)
+    if(movieList === undefined || movieList.length === 0)
     {
         return (
-            <Typography variant="h1" component='p'>No favorite movies added yet</Typography>
+            <Typography style={{ color: 'white', marginTop: '2%' }} variant="h3" align="center" component='p'>No favorite movies added yet.</Typography>
         );
     }
 

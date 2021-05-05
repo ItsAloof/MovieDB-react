@@ -38,7 +38,14 @@ export default function Home() {
     setLoading(true);
     clearMovies();
     // const moviesUrl = `http://localhost:3000/api/movies`;
-    const moviesUrl = `${window.location.href}/api/movies`;
+    let moviesUrl;
+    if(process.env.VERCEL === 1)
+    {
+      moviesUrl = `${window.location.href}/api/movies`;
+
+    }else{
+      moviesUrl = 'http://localhost:3000/api/movies';
+    }
     const payload = { params: { api_key: `${process.env.API_KEY}`, query: search, include_adult: false } };
     const res = await axios.get(moviesUrl, payload);
     console.log(res);
