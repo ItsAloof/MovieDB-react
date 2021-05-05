@@ -13,9 +13,9 @@ const MenuBar = () => {
     return (
         <AppBar position="sticky">
             <Toolbar>
-                <IconButton edge="start">
+                {/* <IconButton edge="start">
                     <MenuIcon fontSize="large" />
-                </IconButton>
+                </IconButton> */}
                 <ButtonBase disableRipple style={{ color: chooseColor('/'), marginRight: '10px'}} onClick={() => {router.push('/')}}>
                     <Typography variant="button">Home</Typography>
                 </ButtonBase>
