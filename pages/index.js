@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { Container } from 'semantic-ui-react'
 import clsx from 'clsx'
-import { ButtonBase } from '@material-ui/core'
+import { ButtonBase, Typography } from '@material-ui/core'
 
 
 export default function Home() {
@@ -21,8 +21,8 @@ export default function Home() {
     <div id="root">
       <Container className="searchBar">
         <SearchBar disabled={loading} onSearch={getMovies} loading={loading} isLoading={setLoading}/>
-        <ButtonBase value="Clear Movies" onClick={clearMovies} >
-
+        <ButtonBase value="Clear Movies" onClick={clearMovies}>
+          <Typography style={{color: 'white', marginTop: '10px'}} variant="body1" component="p">Clear Movies</Typography> 
         </ButtonBase>
       </Container>
       <div>
@@ -37,10 +37,9 @@ export default function Home() {
   {
     setLoading(true);
     clearMovies();
-    const moviesUrl = window.location.href.lastIndexOf((window.location.href.length)-1) === '/' ? `${window.location.href}/api/movies` : 'http://localhost:3000/api/movies';
+    const moviesUrl = ((window.location.href).charAt((window.location.href.length)-1) !== '/') ? `${window.location.href}/api/movies` : 'http://localhost:3000/api/movies';
     const payload = { params: { api_key: `${process.env.API_KEY}`, query: search, include_adult: false } };
     const res = await axios.get(moviesUrl, payload);
-    console.log(res);
     const data = res.data;
     setLoading(false);
     setMovies({ props: data });
@@ -52,5 +51,3 @@ export default function Home() {
     setMovies({ props: []})
   }
 }
-
-

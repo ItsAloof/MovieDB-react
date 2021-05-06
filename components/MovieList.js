@@ -6,7 +6,7 @@ import axios from 'axios'
 
 // import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@material-ui/core'
 
-const MovieList = ( { movies, getMovieDetails } ) => {
+const MovieList = ( { movies } ) => {
     const imgUrl = 'https://image.tmdb.org/t/p/w500/';
 
     async function getMovieDetails(id)
@@ -23,11 +23,9 @@ const MovieList = ( { movies, getMovieDetails } ) => {
     }
     
     return (
-        <>
-            <Grid className="results" container direction="row" justify="center">
-                {movies.map(movie => (<Movie key={movie.id} movie={movie} imgUrl={imgUrl + movie.poster_path} movieDetails={getMovieDetails(movie.id)}/>))}
-            </Grid>
-        </>
+        <Grid className="results" container direction="row" justify="center">
+            {movies.map(movie => (<Movie key={movie.id} movie={movie} imgUrl={imgUrl + movie.poster_path} movieDetails={getMovieDetails(movie.id)}/>))}
+        </Grid>
     )
 }
 

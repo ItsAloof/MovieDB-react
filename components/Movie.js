@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import theme from '../utils/AppTheme'
 
-const Movie = ({ movie, imgUrl, movieDetails }) => {
+const Movie = ({ movie, imgUrl }) => {
     const currency = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'});
     const [modal, setModal] = React.useState(false);
     const [expanded, setExpanded] = React.useState(false);
@@ -95,7 +95,7 @@ const Movie = ({ movie, imgUrl, movieDetails }) => {
             }
           }
     });
-    console.log('----------------------\n', movie.title, '\nVideo: ', movie.video, "\nruntime: ", movie.runtime, "\nVote average: ", movie.vote_average, "\nVote count: ", movie.vote_count, '\n----------------------');
+    console.log('Movie Poster: ', movie.poster_path)
     
     return (
             <Grid item>
