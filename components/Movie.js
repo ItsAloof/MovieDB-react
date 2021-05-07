@@ -82,7 +82,7 @@ const Movie = ({ movie, imgUrl }) => {
 
     const handleExpand = async () => {
         if(!expanded){
-            const res = await axios.get('http://localhost:3000/api/stream', { params: { query: movie.id } });
+            const res = await axios.get(`${window.location.href}/api/stream`, { params: { query: movie.id } });
             const info = res.data.streamingInfo;
             let arr = [];
             for(const i in info)
