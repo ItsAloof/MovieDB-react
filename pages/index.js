@@ -37,7 +37,8 @@ export default function Home() {
   {
     setLoading(true);
     clearMovies();
-    const moviesUrl = ((window.location.href).charAt((window.location.href.length)-1) !== '/') ? `${window.location.href}/api/movies` : 'http://localhost:3000/api/movies';
+    // const moviesUrl = ((window.location.href).charAt((window.location.href.length)-1) !== '/') ? `${window.location.href}/api/movies` : 'http://localhost:3000/api/movies';
+    const moviesUrl = `${window.location.href}/api/movies`;
     const payload = { params: { api_key: `${process.env.API_KEY}`, query: search, include_adult: false } };
     const res = await axios.get(moviesUrl, payload);
     const data = res.data;
