@@ -47,7 +47,6 @@ export default function Home() {
 
   function clearMovies()
   {
-    console.log(movies);
     setMovies({ props: []})
   }
 }

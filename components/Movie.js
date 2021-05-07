@@ -1,15 +1,15 @@
-import { Modal, Button } from 'semantic-ui-react';
-import { Card, CardContent, CardHeader, Grid, Typography, CardMedia, CardActions, IconButton, Collapse, Divider } from '@material-ui/core';
+import { Card, CardContent, CardHeader, Grid, Typography, CardMedia, CardActions, IconButton, Collapse, Divider, ButtonBase } from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import React from 'react';
 import clsx from 'clsx';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
-import theme from '../utils/AppTheme'
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import axios from 'axios';
+import Streaming from './Streaming';
 
 const Movie = ({ movie, imgUrl }) => {
     const currency = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'});
-    const [modal, setModal] = React.useState(false);
+    const [streaming, setStreaming] = React.useState([]);
     const [expanded, setExpanded] = React.useState(false);
     const [fav, setFav] = React.useState(false);
     const itemName = process.env.ITEMNAME;
@@ -38,7 +38,6 @@ const Movie = ({ movie, imgUrl }) => {
             movies = JSON.parse(movies);
             movies.push(movie);
             localStorage.setItem(itemName, JSON.stringify(movies));
-            console.log(JSON.parse(localStorage.getItem(itemName)));
             return;
         }
     }
@@ -81,6 +80,21 @@ const Movie = ({ movie, imgUrl }) => {
         
     }
 
+    const handleExpand = async () => {
+        if(!expanded){
+            const res = await axios.get('http://localhost:3000/api/stream', { params: { query: movie.id } });
+            const info = res.data.streamingInfo;
+            let arr = [];
+            for(const i in info)
+            {
+                arr.push({ site: i, link: info[i].us.link});
+            }
+            setStreaming(arr);
+        }
+        
+        setExpanded(!expanded);
+    }
+
     if(movie.poster_path === null)
     {
         imgUrl = "./noimage.png";
@@ -95,7 +109,6 @@ const Movie = ({ movie, imgUrl }) => {
             }
           }
     });
-    console.log('Movie Poster: ', movie.poster_path)
     
     return (
             <Grid item>
@@ -109,7 +122,7 @@ const Movie = ({ movie, imgUrl }) => {
                                     <Typography variant="body2" component="p">Budget: {(movie.budget !== 0) ? (currency.format(movie.budget)) : ("Unknown")}</Typography>
                                 </Grid>
                                 <Grid item>
-                                    <Typography variant="body2" component="p">Revenue: {(movie.budget !== 0) ? (currency.format(movie.revenue)) : ("Unknown")}</Typography>
+                                    <Typography variant="body2" component="p">Revenue: {(movie.revenue !== 0) ? (currency.format(movie.revenue)) : ("Unknown")}</Typography>
                                 </Grid>
                                 <Grid item>
                                     <Typography variant="body2" component="p">Popularity: {movie.popularity}</Typography>
@@ -121,12 +134,15 @@ const Movie = ({ movie, imgUrl }) => {
                         <IconButton id={movie.id} aria-label="add to favorites" onClick={handleFavorite} >
                             <FavoriteIcon style={(fav) ? { color: 'red' } : { color: 'white' }} />
                         </IconButton>
-                        <IconButton onClick={() => (setExpanded(!expanded))} style={{marginRight: "0%", marginLeft: "auto", transition: "transform 0.25s"}} className={clsx({dropDown:!expanded}, {dropUp:expanded})}>
+                        <IconButton onClick={handleExpand} style={{marginRight: "0%", marginLeft: "auto", transition: "transform 0.25s"}} className={clsx({dropDown:!expanded}, {dropUp:expanded})}>
                             <ExpandMoreIcon style={{ color: 'white' }}/>
                         </IconButton>
                     </CardActions>
                     <Collapse in={expanded} timeout="auto" unmountOnExit>
                         <CardContent>
+                            <ThemeProvider theme={theme}>
+                                <Streaming key={movie.id + 1} services={streaming} />
+                            </ThemeProvider>
                             <Typography paragraph>{movie.overview}</Typography>
                         </CardContent>
                     </Collapse>
