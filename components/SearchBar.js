@@ -1,24 +1,24 @@
-import { set } from 'mongoose';
 import { useState } from 'react';
-// import { Form, Input, Container, Button, Card } from 'semantic-ui-react'
-import { Grid, Paper, IconButton, 
-    InputBase, Divider, Button, 
-    Card, CardActions, Collapse,
-    CardContent, Typography, CardHeader, Container } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
+import { Paper, IconButton, InputBase, Divider, Container, Typography } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search'
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown'
-import Settings from './Settings';
 
-const SearchBar = ({ search, onSearch, isLoading, loading }) => {
-    const [query, setQuery] = useState("");
-    const [open, setOpen] = useState(false);
+const SearchBar = ({ onSearch, loading }) => {
+    const [query, setQuery] = useState(""); 
+    const [prevQuery, setPreQuery] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if(!query)
         {
             return;
+        }
+        if(query === prevQuery)
+        {
+            return;
+        }else
+        {
+            setPreQuery(query);
         }
         await onSearch(query);
     }
@@ -30,73 +30,25 @@ const SearchBar = ({ search, onSearch, isLoading, loading }) => {
 
     return (
         <Container>
+            <Typography variant="h5" component="p" style={{color: 'white'}}>Search MovieDB</Typography>
             <form onSubmit={handleSubmit}>
-            <Paper className="searchBar" component="div" square={open}>
-                <IconButton onClick={() => (setOpen(!open))}>
+            <Paper className="searchBar" component="div">
+                {/* <IconButton onClick={() => (setOpen(!open))}>
                     <ArrowDropDown />
                 </IconButton>
-                <Divider style={{marginLeft: "0px"}} orientation="vertical" variant="middle" flexItem />
-                <InputBase className="search"
+                <Divider style={{marginLeft: "0px"}} orientation="vertical" variant="middle" flexItem /> */}
+                <InputBase readOnly={loading} id="search" className="search"
                     placeholder="Search..."
                     onChange={handleChange}
                 />
-                <IconButton type="submit" onClick={handleSubmit}>
+                <IconButton disabled={loading} type="submit" onClick={handleSubmit}>
                     <SearchIcon />
                 </IconButton>
             </Paper>
-                <Collapse in={open}>
-                    <Paper square>
-                        <Divider style={{paddingTop: "1px"}} orientation="horizontal" flexItem />
-                        <Typography variant="h5" component="p">Search Settings</Typography>
-                    </Paper>
-                </Collapse>
         </form>
         </Container>
         
     )
-
-    
-    // <form onSubmit={handleSubmit}>
-    //     <Paper className="searchBar" component="div">
-    //         <IconButton onClick={() => (setOpen(!open))}>
-    //             <ArrowDropDown />
-    //         </IconButton>
-    //         <Divider orientation="vertical" variant="middle" flexItem />
-    //         <InputBase className="search"
-    //             placeholder="Search..."
-    //             onChange={handleChange}
-    //         />
-    //         <IconButton type="submit" onClick={handleSubmit}>
-    //             <SearchIcon />
-    //         </IconButton>
-    //     </Paper>
-    // </form>
-
-    // Version 2
-    
-    // <Container>
-    //         <form onSubmit={handleSubmit}>
-    //         <Paper className="searchBar" component="div">
-    //             <IconButton onClick={() => (setOpen(!open))}>
-    //                 <ArrowDropDown />
-    //             </IconButton>
-    //             <Divider orientation="vertical" variant="middle" flexItem />
-    //             <InputBase className="search"
-    //                 placeholder="Search..."
-    //                 onChange={handleChange}
-    //             />
-    //             <IconButton type="submit" onClick={handleSubmit}>
-    //                 <SearchIcon />
-    //             </IconButton>
-    //         </Paper>
-    //             <Collapse in={open}>
-    //                 <Paper square>
-    //                     <Divider orientation="horizontal" flexItem variant="middle" />
-    //                     <Typography variant="h5" component="p">Search Settings</Typography>
-    //                 </Paper>
-    //             </Collapse>
-    //     </form>
-    //     </Container>
 }
 
 export default SearchBar

@@ -1,9 +1,18 @@
-import { Modal, Button } from 'semantic-ui-react'
-import { Card, makeStyles, Grid } from '@material-ui/core'
-import React from 'react'
+import { Card, CardContent, CardHeader, Grid, Typography, CardMedia, CardActions, IconButton, Collapse, Divider, ButtonBase } from '@material-ui/core';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import React from 'react';
+import clsx from 'clsx';
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import axios from 'axios';
+import Streaming from './Streaming';
 
 const Movie = ({ movie, imgUrl }) => {
-    const [modal, setModal] = React.useState(false);
+    const currency = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'});
+    const [streaming, setStreaming] = React.useState([]);
+    const [expanded, setExpanded] = React.useState(false);
+    const [fav, setFav] = React.useState(false);
+    const itemName = process.env.ITEMNAME;
 
     const formatDate = (date) => {
         if (date === "")
@@ -14,40 +23,132 @@ const Movie = ({ movie, imgUrl }) => {
         var newDate = arr[2] + "/" + arr[1] + "/" + arr[0];
         return newDate;
     }
+
+    const storeMovie = () =>
+    {
+        let movies = localStorage.getItem(itemName);
+        if(movies === null)
+        {
+            var list = [];
+            list.push(movie);
+            localStorage.setItem(itemName, JSON.stringify(list));
+            return;
+        }else
+        {
+            movies = JSON.parse(movies);
+            movies.push(movie);
+            localStorage.setItem(itemName, JSON.stringify(movies));
+            return;
+        }
+    }
+
+    React.useEffect(() => {
+        if(typeof localStorage !== 'undefined')
+        {
+            let list = localStorage.getItem(itemName);
+            if(list !== null)
+            {
+                list = JSON.parse(list);
+                for(let i in list)
+                {
+                    if(list[i].id === movie.id)
+                    {
+                        setFav(true);
+                    }
+                }
+            }
+        }
+    }, []);
+
+    const handleFavorite = (id) =>
+    {
+        if(typeof localStorage !== 'undefined')
+        {
+            if(fav)
+            {
+                let movies = JSON.parse(localStorage.getItem(itemName));
+                movies = movies.filter(favMovie => favMovie.id !== movie.id);
+                localStorage.setItem(itemName, JSON.stringify(movies));
+            }else
+            {
+                storeMovie();
+            }
+            setFav(!fav);  
+        }else{
+            return;
+        }
+        
+    }
+
+    const handleExpand = async () => {
+        if(!expanded){
+            const res = await axios.get(`${window.location.href}/api/stream`, { params: { query: movie.id } });
+            const info = res.data.streamingInfo;
+            let arr = [];
+            for(const i in info)
+            {
+                arr.push({ site: i, link: info[i].us.link});
+            }
+            setStreaming(arr);
+        }
+        
+        setExpanded(!expanded);
+    }
+
     if(movie.poster_path === null)
     {
         imgUrl = "./noimage.png";
     }
+
+    const theme = createMuiTheme({
+        overrides: {
+            MuiGrid: {
+              root: {
+                backgroundColor: '#212121'
+              }
+            }
+          }
+    });
     
     return (
-        <div className="column">
-            <div className="ui fluid card">
-                <div className="image">
-                    <img src={imgUrl} height="720" width="500"/>
-                </div>
-                <div className="content">
-                    <div className="header">{movie.title}</div>
-                    <div className="meta">{formatDate(movie.release_date)}</div>
-                    {/* <a onClick={() => setModal(true)} className="result description">{(movie.overview !== "") ? (movie.overview) : ("No description")}</a> */}
-                </div>
-            </div>
-            <Modal open={modal} dimmer="blurring">
-            <div className="ui fluid card">
-                <div>
-                    <img src={imgUrl} height="720" width="500"/>
-                </div>
-                <div className="content">
-                    <div className="header">{movie.title}</div>
-                    <div className="meta">{formatDate(movie.release_date)}</div>
-                    <a onClick={() => setModal(true)} className="result description">{(movie.overview !== "") ? (movie.overview) : ("No description")}</a>
-                </div>
-                <Modal.Actions>
-                    <Button content="Close" onClick={() => setModal(false)} />
-                </Modal.Actions>
-            </div>
-                
-            </Modal>
-        </div>
+            <Grid item>
+                <Card className="result" raised >
+                    <CardHeader title={<Typography variant="h4" gutterBottom>{movie.title}</Typography>} disableTypography subheader={<><Typography variant="subtitle2">Released: {formatDate(movie.release_date)} </Typography></>} />
+                    <CardMedia><img src={imgUrl} height="600" width="400"/></CardMedia>
+                    <CardContent>
+                        <ThemeProvider theme={theme}>
+                            <Grid container spacing={2}>
+                                <Grid item>
+                                    <Typography variant="body2" component="p">Budget: {(movie.budget !== 0) ? (currency.format(movie.budget)) : ("Unknown")}</Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Typography variant="body2" component="p">Revenue: {(movie.revenue !== 0) ? (currency.format(movie.revenue)) : ("Unknown")}</Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Typography variant="body2" component="p">Popularity: {movie.popularity}</Typography>
+                                </Grid>
+                            </Grid>
+                        </ThemeProvider>
+                    </CardContent>
+                    <CardActions >
+                        <IconButton id={movie.id} aria-label="add to favorites" onClick={handleFavorite} >
+                            <FavoriteIcon style={(fav) ? { color: 'red' } : { color: 'white' }} />
+                        </IconButton>
+                        <IconButton onClick={handleExpand} style={{marginRight: "0%", marginLeft: "auto", transition: "transform 0.25s"}} className={clsx({dropDown:!expanded}, {dropUp:expanded})}>
+                            <ExpandMoreIcon style={{ color: 'white' }}/>
+                        </IconButton>
+                    </CardActions>
+                    <Collapse in={expanded} timeout="auto" unmountOnExit>
+                        <CardContent>
+                            <ThemeProvider theme={theme}>
+                                <Streaming key={movie.id + 1} services={streaming} />
+                            </ThemeProvider>
+                            <Typography paragraph>{movie.overview}</Typography>
+                        </CardContent>
+                    </Collapse>
+                </Card>
+            </Grid>
+            
     );
 }
 

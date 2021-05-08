@@ -22,10 +22,10 @@ a {
 }
 
 .results {
-  background-color: #181818;
   margin-top: 2%;
   margin-bottom: 0;
   max-width: 100%;
+  background-color: #484848;
 }
 
 
@@ -40,7 +40,7 @@ a {
   min-width: max-content;
   display: inline-flex;
   margin-top: 2%;
-  padding: 2px;
+  padding-left: 10px;
 }
 
 .search {
@@ -55,7 +55,6 @@ a {
   width: 400px;
   height: auto;
   margin: 20px 15px 50px 15px;
-  background-color: lightgray;
 }
 
 .dropDown {

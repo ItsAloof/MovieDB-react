@@ -5,9 +5,8 @@ import SearchBar from '../components/SearchBar'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { Container } from 'semantic-ui-react'
-import Settings from '../components/Settings'
-import { Collapse } from '@material-ui/core'
 import clsx from 'clsx'
+import { ButtonBase, Typography } from '@material-ui/core'
 
 
 export default function Home() {
@@ -15,12 +14,16 @@ export default function Home() {
   const [movies, setMovies] = React.useState({ });
   const [loading, setLoading] = React.useState(false);
 
+  
+
 
   return (
     <div id="root">
       <Container className="searchBar">
-        <SearchBar onSearch={getMovies} loading={loading} isLoading={setLoading}/>
-        {/* <Settings /> */}
+        <SearchBar disabled={loading} onSearch={getMovies} loading={loading} isLoading={setLoading}/>
+        <ButtonBase value="Clear Movies" onClick={clearMovies}>
+          <Typography style={{color: 'white', marginTop: '10px'}} variant="body1" component="p">Clear Movies</Typography> 
+        </ButtonBase>
       </Container>
       <div>
         <div className={`ui ${clsx({active:loading}, {disabled:!loading})} loader`}></div>
@@ -33,21 +36,18 @@ export default function Home() {
   async function getMovies(search)
   {
     setLoading(true);
-    const moviesUrl = `${baseUrl}/search/movie`;
+    clearMovies();
+    // const moviesUrl = ((window.location.href).charAt((window.location.href.length)-1) !== '/') ? `${window.location.href}/api/movies` : 'http://localhost:3000/api/movies';
+    const moviesUrl = `${window.location.href}/api/movies`;
     const payload = { params: { api_key: `${process.env.API_KEY}`, query: search, include_adult: false } };
     const res = await axios.get(moviesUrl, payload);
-    const data = res.data.results;
-    let arr = [];
-    for(let i in res.data.results)
-    {
-    const movieUrl = `${baseUrl}/movie/${data[i].id}?api_key=${process.env.API_KEY}`
-      const movie = await (await axios.get(movieUrl)).data;
-      arr[i] = movie;
-    }
+    const data = res.data;
     setLoading(false);
-    setMovies({ props: arr });
-    router.push('/');
+    setMovies({ props: data });
+  }
+
+  function clearMovies()
+  {
+    setMovies({ props: []})
   }
 }
-
-
