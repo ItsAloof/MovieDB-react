@@ -26,7 +26,7 @@ async function getStreamingInfo(req, res) {
     const params = req.query;
     const url = 'https://streaming-availability.p.rapidapi.com/get/basic';
         const payload = { params: { country: 'us', tmdb_id: `movie/${params.query}` }, headers: { 
-            'x-rapidapi-key': '4a6de5d557mshfd98dfd95402d56p19e09ejsn7b09252cdf59',
+            'x-rapidapi-key': process.env.STREAM_KEY,
             'x-rapidapi-host': 'streaming-availability.p.rapidapi.com' }};
         const response = await axios.get(url, payload);
         res.status(200).json(response.data);
