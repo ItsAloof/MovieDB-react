@@ -1,7 +1,7 @@
 import { Card, Modal } from 'semantic-ui-react';
 import { Grid } from '@material-ui/core'
 import Movie from './Movie';
-import baseUrl from '../utils/baseUrl'
+import baseUrl from '../../utils/baseUrl'
 import axios from 'axios'
 
 // import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@material-ui/core'

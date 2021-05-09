@@ -1,32 +1,19 @@
-import { Grid, ButtonBase, Typography, createMuiTheme, ThemeProvider } from '@material-ui/core';
-import clsx from 'clsx';
 import React from 'react'
+import { Grid, ButtonBase, Typography, createMuiTheme, ThemeProvider } from '@material-ui/core';
 
-const Streaming = ({ services }) => {
+
+const StreamButton = ({ service }) => {
     const [hover, setHover] = React.useState(false);
-    if(services.length === 0)
-    {
-       return(<></>); 
-    }
-
     return (
-        <>
-            <Typography variant="h6" align="center" >Where to watch</Typography>
-            <Grid style={{ marginBottom: '10px' }}>
-                {(services.map((service) => (
-                <Grid item >
-                    <ThemeProvider theme={chooseTheme(service.site)}>
-                        <ButtonBase onMouseOver={() => (setHover(true))} onMouseLeave={() => (setHover(false))}  href={service.link} >
-                            <Typography color={(hover) ? "secondary" : "primary"} variant="button" component="p">{service.site}</Typography>
-                        </ButtonBase>
-                    </ThemeProvider> 
-                </Grid>
-                )))}
-            </Grid>
-        </>
-        );
+        <Grid item>
+            <ThemeProvider theme={chooseTheme(service.site)}>
+                <ButtonBase onMouseOver={() => (setHover(true))} onMouseLeave={() => (setHover(false))}  href={service.link} >
+                    <Typography color={(hover) ? "secondary" : "primary"} variant="button" component="p">{service.site}</Typography>
+                </ButtonBase>
+            </ThemeProvider> 
+        </Grid>
+    )
 }
-
 
 function chooseTheme(site)
 {
@@ -94,16 +81,4 @@ function chooseTheme(site)
     }
     return colors;
 }
-
-// function capChars(site)
-// {
-//     switch(site)
-//     {
-//         case 'hbo':
-//             return 'HBO';
-//         default:
-//             return (site.charAt(0).toUpperCase() + site.slice(1));
-//     }
-// }
-
-export default Streaming
+export default StreamButton

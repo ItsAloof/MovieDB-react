@@ -5,8 +5,8 @@ import React from 'react';
 import clsx from 'clsx';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import axios from 'axios';
-import Streaming from './Streaming';
-import { getAPIUrl } from '../utils/APIUrl';
+import Streaming from '../Streaming/Streaming';
+import { getAPIUrl } from '../../utils/APIUrl';
 
 const Movie = ({ movie, imgUrl }) => {
     const currency = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'});

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import baseUrl from '../utils/baseUrl'
-import MovieList from '../components/MovieList';
+import MovieList from '../components/Movies/MovieList';
 import SearchBar from '../components/SearchBar';
 import { useRouter } from 'next/router';
 import React from 'react';

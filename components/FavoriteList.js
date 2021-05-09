@@ -1,7 +1,7 @@
 import React from 'react';
-import Movie from './Movie';
+import Movie from './Movies/Movie';
 import { Grid, Typography } from '@material-ui/core';
-import MovieList from './MovieList';
+import MovieList from './Movies/MovieList';
 
 const FavoriteList = ({ movies }) => {
     const imgUrl = 'https://image.tmdb.org/t/p/w500/';
