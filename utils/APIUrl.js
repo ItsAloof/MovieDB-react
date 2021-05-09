@@ -6,12 +6,13 @@ export const getAPIUrl = (url, path) =>
     if(/localhost/.test(url))
     {
         newUrl = url.replace(/\/?$/, "");
+        return (newUrl + path);
     }
     if(/FavoriteMovies/.test(url)){
         let newUrl = url.replace(/\/FavoriteMovies.*/, path);
         return newUrl;
     }else{
-        return (newUrl + path);
+        return (url + path);
     }
 
 }
