@@ -1,6 +1,6 @@
 import { Typography } from '@material-ui/core';
 import React from 'react'
-import FavoriteList from '../components/FavoriteList'
+import FavoriteList from '../components/Movies/FavoriteList'
 
 const FavoriteMovies = () => {
     const [movies, setMovies] = React.useState({});

@@ -2,17 +2,17 @@
 
 export const getAPIUrl = (url, path) =>
 {
-    let newUrl;
-    if(/localhost/.test(url))
+    let newUrl = url;
+    if(/localhost/.test(url) || /192.168.0.11/.test(url))
     {
         newUrl = url.replace(/\/?$/, "");
-        return (newUrl + path);
     }
+    
     if(/FavoriteMovies/.test(url)){
-        let newUrl = url.replace(/\/FavoriteMovies.*/, path);
+        newUrl = newUrl.replace(/\/FavoriteMovies.*/, path);
         return newUrl;
     }else{
-        return (url + path);
+        return (newUrl + path);
     }
 
 }

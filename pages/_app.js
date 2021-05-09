@@ -2,8 +2,8 @@ import App from 'next/app';
 import Layout from '../components/Layout';
 import '../styles/globals.css';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import AppTheme from '../utils/AppTheme';
-import { getAPIUrl } from '../utils/APIUrl';
+import connectDB from '../utils/connectDB';
+import connectDb from '../utils/connectDB';
 
 
 class MyApp extends App {

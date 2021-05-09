@@ -19,17 +19,4 @@ const Streaming = ({ services }) => {
         );
 }
 
-
-
-// function capChars(site)
-// {
-//     switch(site)
-//     {
-//         case 'hbo':
-//             return 'HBO';
-//         default:
-//             return (site.charAt(0).toUpperCase() + site.slice(1));
-//     }
-// }
-
 export default Streaming

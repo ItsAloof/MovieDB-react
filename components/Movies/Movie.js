@@ -81,28 +81,51 @@ const Movie = ({ movie, imgUrl }) => {
         
     }
 
+    // const handleExpand = async () => {
+    //     setExpanded(!expanded);
+    //     if(!expanded){
+    //         const url = getAPIUrl(window.location.href, "/api/stream");
+    //         const res = await axios.get(url, { params: { query: movie.id } });
+    //         if(res.status === 201 || res.data.streamingInfo === null)
+    //         {
+    //             return;
+    //         }
+    //         const info = res.data.streamingInfo;
+    //         let arr = [];
+    //         for(const i in info)
+    //         {
+    //             arr.push({ site: i, link: info[i].us.link});
+    //         }
+    //         setStreaming(arr);
+    //     }
+    // }
+
     const handleExpand = async () => {
         setExpanded(!expanded);
         if(!expanded){
             const url = getAPIUrl(window.location.href, "/api/stream");
             const res = await axios.get(url, { params: { query: movie.id } });
-            if(res.status === 201 || res.data.streamingInfo === null)
+            if(res.status === 200)
             {
+                setStreaming(convertToArr(res.data));
+            }else{
                 return;
             }
-            const info = res.data.streamingInfo;
-            let arr = [];
-            for(const i in info)
-            {
-                arr.push({ site: i, link: info[i].us.link});
-            }
-            setStreaming(arr);
         }
+    }
+
+    function convertToArr(data)
+    {
+        let arr = [];
+        for(var i in data){
+            arr.push({ site: i, link: data[i].us.link });
+        }
+        return arr;
     }
 
     if(movie.poster_path === null)
     {
-        imgUrl = "./noimage.png";
+        imgUrl = "./noimage.svg";
     }
 
     const theme = createMuiTheme({
