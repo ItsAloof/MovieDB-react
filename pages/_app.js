@@ -3,7 +3,7 @@ import Layout from '../components/Layout';
 import '../styles/globals.css';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import AppTheme from '../utils/AppTheme';
-
+import { getAPIUrl } from '../utils/APIUrl';
 
 
 class MyApp extends App {

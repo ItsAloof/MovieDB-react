@@ -6,6 +6,7 @@ import clsx from 'clsx';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import axios from 'axios';
 import Streaming from './Streaming';
+import { getAPIUrl } from '../utils/APIUrl';
 
 const Movie = ({ movie, imgUrl }) => {
     const currency = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'});
@@ -81,8 +82,14 @@ const Movie = ({ movie, imgUrl }) => {
     }
 
     const handleExpand = async () => {
+        setExpanded(!expanded);
         if(!expanded){
-            const res = await axios.get(`${window.location.href}/api/stream`, { params: { query: movie.id } });
+            const url = getAPIUrl(window.location.href, "/api/stream");
+            const res = await axios.get(url, { params: { query: movie.id } });
+            if(res.status === 201 || res.data.streamingInfo === null)
+            {
+                return;
+            }
             const info = res.data.streamingInfo;
             let arr = [];
             for(const i in info)
@@ -91,8 +98,6 @@ const Movie = ({ movie, imgUrl }) => {
             }
             setStreaming(arr);
         }
-        
-        setExpanded(!expanded);
     }
 
     if(movie.poster_path === null)
@@ -140,10 +145,15 @@ const Movie = ({ movie, imgUrl }) => {
                     </CardActions>
                     <Collapse in={expanded} timeout="auto" unmountOnExit>
                         <CardContent>
+                            <hr color="#2b2b2b" />
                             <ThemeProvider theme={theme}>
                                 <Streaming key={movie.id + 1} services={streaming} />
                             </ThemeProvider>
-                            <Typography paragraph>{movie.overview}</Typography>
+                            <hr color="#2b2b2b" />
+                            <Typography variant="h6" align="center">
+                                Overview 
+                            </Typography>
+                            <Typography paragraph>{(movie.overview === "") ? "No overview available." : movie.overview}</Typography>
                         </CardContent>
                     </Collapse>
                 </Card>

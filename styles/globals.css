@@ -71,3 +71,12 @@ a {
 .secondaryColor {
   color: white;
 }
+
+hr {
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+
+#streaming > a:hover {
+  color: darkblue;
+}
