@@ -15,7 +15,7 @@ const MovieSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    imdbID: {
+    imdb_id: {
         type: String
     },
     overview: {
@@ -38,6 +38,7 @@ const MovieSchema = new mongoose.Schema({
     adult: {
         type: Boolean
     },
+    
     streamingInfo: {
         type: Mixed,
         default: null
