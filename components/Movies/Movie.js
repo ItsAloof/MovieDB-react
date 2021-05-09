@@ -63,7 +63,7 @@ const Movie = ({ movie, imgUrl }) => {
 
     const handleFavorite = (id) =>
     {
-        if(typeof localStorage !== 'undefined')
+        if(typeof localStorage !== undefined)
         {
             if(fav)
             {
@@ -80,25 +80,6 @@ const Movie = ({ movie, imgUrl }) => {
         }
         
     }
-
-    // const handleExpand = async () => {
-    //     setExpanded(!expanded);
-    //     if(!expanded){
-    //         const url = getAPIUrl(window.location.href, "/api/stream");
-    //         const res = await axios.get(url, { params: { query: movie.id } });
-    //         if(res.status === 201 || res.data.streamingInfo === null)
-    //         {
-    //             return;
-    //         }
-    //         const info = res.data.streamingInfo;
-    //         let arr = [];
-    //         for(const i in info)
-    //         {
-    //             arr.push({ site: i, link: info[i].us.link});
-    //         }
-    //         setStreaming(arr);
-    //     }
-    // }
 
     const handleExpand = async () => {
         setExpanded(!expanded);
