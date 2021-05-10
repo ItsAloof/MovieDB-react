@@ -1,12 +1,10 @@
 import axios from 'axios';
-import baseUrl from '../utils/baseUrl'
 import MovieList from '../components/Movies/MovieList';
 import SearchBar from '../components/SearchBar';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { Container } from 'semantic-ui-react';
 import clsx from 'clsx';
-import { ButtonBase, Typography } from '@material-ui/core';
 import { getAPIUrl } from '../utils/APIUrl';
 
 
@@ -21,10 +19,7 @@ export default function Home() {
   return (
     <div id="root">
       <Container className="searchBar">
-        <SearchBar disabled={loading} onSearch={getMovies} loading={loading} isLoading={setLoading}/>
-        <ButtonBase value="Clear Movies" onClick={clearMovies}>
-          <Typography style={{color: 'white', marginTop: '10px'}} variant="body1" component="p">Clear Movies</Typography> 
-        </ButtonBase>
+        <SearchBar disabled={loading} onSearch={getMovies} loading={loading} isLoading={setLoading} clearMovies={clearMovies} />
       </Container>
       <div>
         <div className={`ui ${clsx({active:loading}, {disabled:!loading})} loader`}></div>
@@ -38,7 +33,6 @@ export default function Home() {
   {
     setLoading(true);
     clearMovies();
-    // const moviesUrl = ((window.location.href).charAt((window.location.href.length)-1) !== '/') ? `${window.location.href}/api/movies` : 'http://localhost:3000/api/movies';
     let moviesUrl = getAPIUrl(window.location.href, "/api/movies");
     const payload = { params: { query: search, include_adult: false } };
     const res = await axios.get(moviesUrl, payload);

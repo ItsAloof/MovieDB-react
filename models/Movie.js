@@ -38,7 +38,36 @@ const MovieSchema = new mongoose.Schema({
     adult: {
         type: Boolean
     },
-    
+    runtime: {
+        type: Number
+    },
+    homepage: {
+        type: String
+    },
+    original_language: {
+        type: String
+    },
+    original_title: {
+        type: String
+    },
+    status: {
+        type: String
+    },
+    tagline: {
+        type: String
+    },
+    video: {
+        type: Boolean
+    },
+    vote_average: {
+        type: Number
+    },
+    vote_count: {
+        type: Number
+    },
+    genres: {
+        type: Array
+    },
     streamingInfo: {
         type: Mixed,
         default: null

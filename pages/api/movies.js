@@ -4,23 +4,25 @@ import axios from 'axios';
 import connectDb from '../../utils/connectDB';
 
 export default async (req, res) => {
+    let start = Date.now();
     connectDb();
-    const params = req.query;
+    const { query, include_adult } = req.query;
 
     const moviesUrl = `${baseUrl}/search/movie`;
-    const payload = { params: { api_key: `${process.env.API_KEY}`, query: params.query, include_adult: params.include_adult } };
+    const payload = { params: { api_key: `${process.env.API_KEY}`, query, include_adult } };
     const response = await axios.get(moviesUrl, payload);
-    const data = response.data.results;
+    const { results } = response.data;
     let arr = [];
-    for(let i in response.data.results)
+    for(let i in results)
     {
-      const moviedb = await Movie.findOne( { id: data[i].id } );
+      const { id } = results[i];
+      const moviedb = await Movie.findOne( { id } );
       if(moviedb)
       {
         arr[i] = moviedb;
         continue;
       }else{
-        const movieUrl = `${baseUrl}/movie/${data[i].id}?api_key=${process.env.API_KEY}`
+        const movieUrl = `${baseUrl}/movie/${id}?api_key=${process.env.API_KEY}`
         const movie = await (await axios.get(movieUrl)).data;
         addMovieToDB(movie);
         arr[i] = movie;
@@ -28,20 +30,39 @@ export default async (req, res) => {
     }
 
     res.status(200).json(arr);
+    let end = Date.now();
+    console.log("API get request took", (end-start), "ms");
 }
 
 async function addMovieToDB(data)
 {
-  const { id, title, release_date, overview , poster_path, budget, revenue, popularity } = data;
+  const { adult, backdrop_path, budget, homepage, 
+      id, imdb_id, original_language, original_title, 
+      title, overview, popularity, poster_path, release_date, 
+      revenue, runtime, status, tagline, video,
+      vote_average, vote_count, genres } = data;
   const movie = await new Movie({
     id,
+    imdb_id,
     title,
+    original_title,
     release_date,
     overview,
     poster_path,
     budget, 
     revenue,
-    popularity
+    popularity,
+    adult,
+    backdrop_path,
+    homepage,
+    original_language,
+    runtime,
+    status,
+    tagline,
+    video,
+    vote_average,
+    vote_count,
+    genres
   }).save();
 }
 

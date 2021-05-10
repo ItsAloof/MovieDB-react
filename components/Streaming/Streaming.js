@@ -3,10 +3,12 @@ import clsx from 'clsx';
 import React from 'react'
 import StreamButton from './StreamButton'
 
-const Streaming = ({ services }) => {
+const Streaming = ({ services, isStreaming }) => {
     if(services.length === 0)
     {
        return(<></>); 
+    }else{
+        isStreaming(true);
     }
 
     return (

@@ -1,4 +1,5 @@
-import { Card, CardContent, CardHeader, Grid, Typography, CardMedia, CardActions, IconButton, Collapse, Divider, ButtonBase } from '@material-ui/core';
+import { Card, CardContent, CardHeader, Grid, Typography, 
+    CardMedia, CardActions, IconButton, Collapse, Box, Tooltip } from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import React from 'react';
@@ -7,23 +8,15 @@ import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import axios from 'axios';
 import Streaming from '../Streaming/Streaming';
 import { getAPIUrl } from '../../utils/APIUrl';
+import { formatDate, formatRuntime, number, currency, formatGenres } from '../../utils/Formatting';
 
 const Movie = ({ movie, imgUrl }) => {
-    const currency = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'});
     const [streaming, setStreaming] = React.useState([]);
     const [expanded, setExpanded] = React.useState(false);
+    const [enabled, setEnabled] = React.useState(false);
     const [fav, setFav] = React.useState(false);
     const itemName = process.env.ITEMNAME;
 
-    const formatDate = (date) => {
-        if (date === "")
-        {
-            return ("No release date")
-        }
-        var arr = date.split("-");
-        var newDate = arr[2] + "/" + arr[1] + "/" + arr[0];
-        return newDate;
-    }
 
     const storeMovie = () =>
     {
@@ -118,23 +111,58 @@ const Movie = ({ movie, imgUrl }) => {
             }
           }
     });
+
+    const style = createMuiTheme({
+        palette: {
+            primary: {
+                main: '#ffffff'
+            }
+        },
+        overrides: {
+            MuiTooltip: {
+                tooltip: {
+                    fontSize: '1rem'
+                }
+            }
+        }
+    })
     
     return (
             <Grid item>
                 <Card className="result" raised >
-                    <CardHeader title={<Typography variant="h4" gutterBottom>{movie.title}</Typography>} disableTypography subheader={<><Typography variant="subtitle2">Released: {formatDate(movie.release_date)} </Typography></>} />
+                    <ThemeProvider theme={style} >
+                    <CardHeader  title={
+                            <Tooltip title={movie.title} arrow interactive leaveDelay={500} placement="top">
+                                <Box maxWidth="368px" component="div" textOverflow="ellipsis" >
+                                    <Typography noWrap variant="h4" gutterBottom>
+                                        {movie.title}
+                                    </Typography>
+                                </Box>
+                            </Tooltip>}
+                    
+                    subheader={<><Typography variant="subtitle2" color="primary">Released: {formatDate(movie.release_date)} </Typography></>} />
+                    </ThemeProvider>
                     <CardMedia><img src={imgUrl} height="600" width="400"/></CardMedia>
                     <CardContent>
                         <ThemeProvider theme={theme}>
-                            <Grid container spacing={2}>
-                                <Grid item>
+                            <Grid container spacing={1} justify="center">
+                                <Grid item xs={6} id="leftSide">
                                     <Typography variant="body2" component="p">Budget: {(movie.budget !== 0) ? (currency.format(movie.budget)) : ("Unknown")}</Typography>
                                 </Grid>
-                                <Grid item>
+                                <Grid item xs={6}>
                                     <Typography variant="body2" component="p">Revenue: {(movie.revenue !== 0) ? (currency.format(movie.revenue)) : ("Unknown")}</Typography>
                                 </Grid>
-                                <Grid item>
-                                    <Typography variant="body2" component="p">Popularity: {movie.popularity}</Typography>
+                                <Grid item xs={6} id="leftSide">
+                                    <Typography variant="body2" component="p">Runtime: {formatRuntime(movie.runtime)}</Typography>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Typography variant="body2" component="p">{formatGenres(movie.genres)}</Typography>
+                                </Grid>
+                                <Grid item xs={6} id="leftSide">
+                                    <Typography variant="body2" component="p">Rating: {movie.vote_average}/10</Typography>
+                                </Grid>
+                                <Grid item xs>
+                                    <Typography variant="body2" component="p">Votes: {number.format(movie.vote_count)}</Typography>
                                 </Grid>
                             </Grid>
                         </ThemeProvider>
@@ -149,9 +177,9 @@ const Movie = ({ movie, imgUrl }) => {
                     </CardActions>
                     <Collapse in={expanded} timeout="auto" unmountOnExit>
                         <CardContent>
-                            <hr color="#2b2b2b" />
+                            {(enabled) ? (<hr color="#2b2b2b" />) : <></>}
                             <ThemeProvider theme={theme}>
-                                <Streaming key={movie.id + 1} services={streaming} />
+                                <Streaming key={movie.id + 1} services={streaming} isStreaming={setEnabled} />
                             </ThemeProvider>
                             <hr color="#2b2b2b" />
                             <Typography variant="h6" align="center">
@@ -162,7 +190,6 @@ const Movie = ({ movie, imgUrl }) => {
                     </Collapse>
                 </Card>
             </Grid>
-            
     );
 }
 
