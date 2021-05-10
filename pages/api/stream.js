@@ -1,7 +1,6 @@
 import axios from 'axios';
 import Movie from '../../models/Movie';
 import connectDb from '../../utils/connectDB';
-// import data from './test.json';
 
 export default async (req, res) => {
     connectDb();

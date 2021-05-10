@@ -4,7 +4,6 @@ import axios from 'axios';
 import connectDb from '../../utils/connectDB';
 
 export default async (req, res) => {
-    let start = Date.now();
     connectDb();
     const { query, include_adult } = req.query;
 
@@ -30,8 +29,6 @@ export default async (req, res) => {
     }
 
     res.status(200).json(arr);
-    let end = Date.now();
-    console.log("API get request took", (end-start), "ms");
 }
 
 async function addMovieToDB(data)

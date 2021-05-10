@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Paper, IconButton, InputBase, Divider, Container, Typography, ButtonBase } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search'
-import ArrowDropDown from '@material-ui/icons/ArrowDropDown'
 
 const SearchBar = ({ onSearch, loading, clearMovies }) => {
     const [query, setQuery] = useState(""); 
