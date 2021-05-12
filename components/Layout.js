@@ -1,7 +1,4 @@
-import { Container } from 'semantic-ui-react'
-import HeadContent from './HeadContent'
 import Head from 'next/head'
-import { Children } from 'react'
 import MenuBar from './MenuBar'
 
 
@@ -9,7 +6,9 @@ const Layout = ({ children }) => {
     return (
     <>
         <Head>
-            <HeadContent />
+            <meta name="author" content="Nick Ricciardelli" />
+            <meta name="description" content="This is a rough draft of the final project for a movie search database interface" />
+            <title>MovieDB</title>
             <link
                 rel="stylesheet"
                 href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css"
