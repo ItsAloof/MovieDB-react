@@ -125,7 +125,7 @@ const Movie = ({ movie, imgUrl }) => {
                 }
             }
         }
-    })
+    });
     
     return (
             <Grid item>

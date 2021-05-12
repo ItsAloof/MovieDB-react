@@ -3,7 +3,7 @@
 export const getAPIUrl = (url, path) =>
 {
     let newUrl = url;
-    if(/localhost/.test(url) || /192.168.0.11/.test(url))
+    if(/localhost/.test(url) || /\d+\.\d+\.\d+\.\d+:\d+\//.test(url))
     {
         newUrl = url.replace(/\/?$/, "");
     }

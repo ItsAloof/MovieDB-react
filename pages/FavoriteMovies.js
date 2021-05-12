@@ -14,7 +14,6 @@ const FavoriteMovies = () => {
             {
                 list = JSON.parse(list);
                 setMovies({ movies: list });
-                console.log('Movies', movies);
             }
         }
     }, []);
